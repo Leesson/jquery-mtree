@@ -1,0 +1,23 @@
+{
+  "name": "jquery-mtree",
+  "description": "jquery plugin",
+  "main": "js/mtree.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "mtree"
+  ],
+  "authors": [
+    "Leesson <shclixian@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

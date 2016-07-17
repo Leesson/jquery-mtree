@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多功能树插件</title>
+    <link rel="stylesheet" type="text/css" href="css/mtree.css">
+    <link rel="stylesheet" type="text/css" href="libs/contextMenu/smartMenu.css">
+    <style>
+        body {
+            font-family: "Microsoft YaHei";
+        }
+
+        .my-tree {
+            width: 400px;
+            display: inline-block;
+            margin-right: 30px;
+            vertical-align: top;
+        }
+
+        #tree1 {
+        }
+
+        #tree2 {
+        }
+    </style>
+</head>
+<body>
+<div class="htmleaf-container">
+    <div class="search" style="padding: 10px;">
+        <input type="text" id="searchText"/>
+        <input type="button" id="searchBtn" value="搜索"/>
+        <!--<button id="searchBtn">搜索</button>-->
+    </div>
+    <div id="tree1" class="my-tree"></div>
+    <div id="tree2" class="my-tree"></div>
+</div>
+
+<script src="http://lixian.arcgislocal.com/arcgis/portal/libs/jquery-1.11.3.min.js"></script>
+<script src="js/jquery-mtree.js"></script>
+<script src="libs/contextMenu/jquery-smartMenu.js"></script>
+<script>
+    var tree = [
+        {
+            "text": "全部",
+            "num": 30,
+            "q": '全部',
+            "nodes": []
+        },
+        {
+            "text": "地图",
+            "num": 20,
+            "q": '地图',
+            "nodes": [{
+                "text": "Web地图",
+                "q": 'Web地图'
+            }, {
+                "text": "地图文件",
+                "q": '地图文件'
+            }]
+        }, {
+            "text": "图层",
+            "num": 23,
+            "q": '图层',
+            "nodes": [{
+                "text": "Web图层",
+                "num": 34,
+                "q": 'Web图层',
+                "nodes": [{
+                    "text": "要素图层",
+                    "q": '要素图层'
+                }, {
+                    "text": "切片图层",
+                    "q": '切片图层'
+                }, {
+                    "text": "地图图像图层",
+                    "q": '地图图像图层'
+                }, {
+                    "text": "影像",
+                    "q": '影像'
+                }, {
+                    "text": "表",
+                    "q": '表'
+                }]
+            }, {
+                "text": "图层文件",
+                "q": '图层文件'
+            }]
+        }, {
+            "text": "场景",
+            "num": 2,
+            "q": '场景'
+        }, {
+            "text": "应用程序",
+            "q": '应用程序',
+            "nodes": [{
+                "text": "Web",
+                "q": 'Web'
+            }, {
+                "text": "移动",
+                "q": '移动'
+            }, {
+                "text": "桌面",
+                "q": '桌面'
+            }]
+        }, {
+            "text": "工具",
+            "num": 87,
+            "q": '工具',
+            "nodes": [{
+                "text": "地址定位器",
+                "q": '地址定位器'
+            }, {
+                "text": "地理数据库访问",
+                "q": '地理数据库访问'
+            }, {
+                "text": "几何运算",
+                "q": '几何运算'
+            }, {
+                "text": "地理处理任务",
+                "q": '地理处理任务'
+            }, {
+                "text": "网络分析",
+                "q": '网络分析'
+            }]
+        }, {
+            "text": "文件",
+            "num": 43,
+            "q": '文件',
+            "nodes": [{
+                "text": "文档",
+                "q": '文档'
+            }, {
+                "text": "图像",
+                "q": '图像'
+            }, {
+                "text": "PDF",
+                "q": 'PDF'
+            }]
+        }
+    ];
+</script>
+<script>
+    /**
+     * 函数内部this指向操作的dom节点
+     * @param obj obj是json对象，包括属性有data(操作节点对应的json数据对象)、parent(父级json数据对象)、index(在父级子节点的索引位置), text(重命名或新增的显示文字)
+     * @param operation opration指操作类型：0(新增), 1(重命名), 2(删除), 3(选择)
+     * @param modifyNode Function，只有当新增节点时带有此参数，需要传入对应新节点的json数据
+     */
+    var callback = function (obj, operation, modifyNode) {
+        var ele = this,
+            jsonNode;
+        if(obj) {
+            console.log(operation);
+        }
+
+        //新增节点时调用，其他重命名、删除不需要调用
+        if(operation == 0) {
+            jsonNode = {
+                'text': obj['text'],
+                'q': obj['parent']['q'] + '_' + obj['index'],
+                'num': 0
+            };
+            if(!obj['parent']['nodes']) {
+                obj['parent']['nodes'] = [];
+            }
+//            obj['parent']['nodes'].splice(obj['index'], 0, jsonNode);
+            modifyNode(jsonNode);
+            return true;
+        } else if(operation == 1) {
+//            obj['data']['text'] = obj['text'];
+            return true;
+        } else if(operation == 2) {
+//            obj["parent"]['nodes'].splice(obj["index"], 1);
+            return true;
+        } else if(operation == 3) {
+            console.log('select');
+        }
+    };
+
+    //$(tree1[1]).data("plugin_mtree")
+    var tree1 = $("#tree1").mtree(tree, {
+        title: "我的资源",
+        identify_field: "q",
+        display_field: "text",
+        child_field: "nodes",
+        num_field: "num",
+//        link_to: "http://localhost:8080/mtree/index1.html?id=__id__",
+//        close_same_level: false,
+        selected: "表",
+        search_box: true,
+        editable: true,
+        callback: callback,
+        returnOnlyDom: false
+    });
+
+    var tree2 = $("#tree2").mtree(tree, {
+        title: "我的资源",
+        identify_field: "q",
+        display_field: "text",
+        child_field: "nodes",
+        num_field: "num",
+//        link_to: "http://localhost:8080/mtree/index1.html?id=__id__",
+//        close_same_level: false,
+        selected: "表",
+        search_box: true,
+        editable: true,
+        callback: callback,
+//        context_menu: ['delete', 'insert'],
+        custom_context_menu: [
+            [{
+                text: "自定义右键菜单项",
+                func: function () {
+                    console.log('add your code here');
+                    alert('您点击了自定义右键菜单项');
+                }
+            }]
+        ],
+        returnOnlyDom: false
+    });
+
+    function closeTree() {
+        tree.find("li.mtree-active").removeClass("mtree-active");
+        tree.find("li.mtree-open").children("ul").css("display", "none");
+        tree.find("li.mtree-open").removeClass("mtree-open");
+    }
+
+    $("#searchBtn").click(function() {
+        tree1[1].search($("#searchText").val());
+    });
+    $("#searchText").bind("keydown", function(e) {
+        if(e.which == 13) {
+            tree1[1].search($("#searchText").val());
+        }
+    });
+
+
+    //应在回调函数中实现
+    function insertNode2Json (trigger, node, pos, settings) {
+        var obj = this.getObjById(this.jsonTree, trigger.id, settings);
+        if (obj) {
+            if (pos == "append") {
+                var childs = obj["data"][settings["child_field"]];
+                if (!childs) {
+                    childs = obj["data"][settings["child_field"]] = [];
+                }
+                childs.push(node);
+            } else if (pos == "before") {
+                var parent = obj["parent"];
+                var index = obj["index"];
+                if (parent && index > 0) {
+                    parent.splice(index, 0, node);
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>
