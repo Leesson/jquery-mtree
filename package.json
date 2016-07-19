@@ -1,0 +1,25 @@
+{
+  "name": "jquery-mtree",
+  "version": "1.0.0",
+  "description": "jquery plugin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leesson/jquery-mtree.git"
+  },
+  "keywords": [
+    "mtree"
+  ],
+  "author": "Leesson <shclixian@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Leesson/jquery-mtree/issues"
+  },
+  "homepage": "https://github.com/Leesson/jquery-mtree#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
