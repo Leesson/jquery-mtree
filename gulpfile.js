@@ -14,8 +14,8 @@ gulp.task('default', function() {
 });
 
 gulp.task('minifyjs', function() {
-    return gulp.src('js/*.js')
-        .pipe(concat('main.js'))    //合并所有js到main.js
+    return gulp.src('js/jquery-mtree.js')
+        //.pipe(concat('main.js'))    //合并所有js到main.js
         .pipe(gulp.dest('dist/js'))    //输出main.js到文件夹
         .pipe(rename({suffix: '.min'}))   //rename压缩后的文件名
         .pipe(uglify())    //压缩
